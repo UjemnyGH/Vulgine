@@ -30,7 +30,7 @@ namespace vg {
         std::vector<VkPresentModeKHR> presentModes;
     };
 
-    class Device {
+    class Vg_Device {
     private:
         VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
         VkDevice logicalDevice;
@@ -134,6 +134,12 @@ namespace vg {
         }
 
     public:
+        /**
+         * @brief Create a Devices (physical and logical)
+         * 
+         * @param pInstance give pointer to Instance class
+         * @return int should return 0
+         */
         int CreateDevices(Instance* pInstance) {
             _pInstance = pInstance;
 
@@ -201,6 +207,11 @@ namespace vg {
             vkGetDeviceQueue(logicalDevice, indices.presentFamily.value(), 0, &presentQueue);
         }
 
+        /**
+         * @brief Find queue families support eg. graphics nd present support
+         * 
+         * @return QueueFamilyIndices 
+         */
         QueueFamilyIndices findQueueFamily() {
             QueueFamilyIndices indices;
 
@@ -234,6 +245,11 @@ namespace vg {
             return indices;
         }
 
+        /**
+         * @brief Get support of presentation surface
+         * 
+         * @return SwapchainSupportDetails 
+         */
         SwapchainSupportDetails querySwapchainSupport() {
             SwapchainSupportDetails details;
 
@@ -259,7 +275,51 @@ namespace vg {
             return details;
         }
 
+        /**
+         * @brief Get the Physical Device Ptr
+         * 
+         * @return VkPhysicalDevice* 
+         */
         VkPhysicalDevice* getPhysicalDevicePtr() { return &physicalDevice; }
+
+        /**
+         * @brief Get the Logical Device Ptr
+         * 
+         * @return VkDevice* 
+         */
         VkDevice* getLogicalDevicePtr() { return &logicalDevice; }
+
+        /**
+         * @brief Get the Graphics Queue Ptr
+         * 
+         * @return VkQueue* 
+         */
+        VkQueue* getGraphicsQueuePtr() { return &graphicsQueue; }
+
+        /**
+         * @brief Get the Present Queue Ptr
+         * 
+         * @return VkQueue* 
+         */
+        VkQueue* getPresentQueuePtr() { return &presentQueue; }
+
+        /**
+         * @brief Get the Instance Ptr 
+         * 
+         * @return VkInstance* 
+         */
+        Instance* getInstancePtr() { return _pInstance; }
+
+        /**
+         * @brief Destroy the Vg_Device object call it manually for proper work
+         * 
+         */
+        ~Vg_Device() {
+            vkDestroyDevice(logicalDevice, nullptr);
+
+            _pInstance->~Vg_Instance();
+        }
     };
+
+    typedef Vg_Device Device;
 }

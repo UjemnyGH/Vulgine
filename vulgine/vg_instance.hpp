@@ -16,6 +16,11 @@ namespace vg {
     };
 
     #ifdef _glfw3_h_
+    /**
+     * @brief Get the Extensions object
+     * 
+     * @return std::vector<const char*> 
+     */
     std::vector<const char*> getExtensions() {
         uint32_t count = 0;
         const char** extensions = glfwGetRequiredInstanceExtensions(&count);
